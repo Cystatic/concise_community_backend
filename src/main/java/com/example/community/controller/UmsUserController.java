@@ -7,6 +7,7 @@ import com.example.community.model.entity.UmsUser;
 import com.example.community.service.IUmsUserService;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+import static com.example.community.jwt.JwtUtil.USER_NAME;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -39,5 +40,16 @@ public class UmsUserController extends BaseController {
         Map<String, String> map = new HashMap<>(16);
         map.put("token", token);
         return ApiResult.success(map, "登录成功");
+    }
+
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    public ApiResult<UmsUser> getUser(@RequestHeader(value = USER_NAME) String userName) {
+        UmsUser user = iUmsUserService.getUserByUsername(userName);
+        return ApiResult.success(user);
+
+    }
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public ApiResult<Object> logOut() {
+        return ApiResult.success(null, "注销成功");
     }
 }
